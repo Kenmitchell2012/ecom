@@ -1,11 +1,12 @@
 from django.shortcuts import render, redirect
-from .models import Product
+from .models import Product, Cart, Product, CartProduct
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from django import forms
 from .forms import SignUpForm
+from django.db import models
 
 # Create your views here.
 
@@ -60,3 +61,23 @@ def register_user(request):
 def product(request, pk):
     product = Product.objects.get(id=pk)
     return render(request, 'product.html', {'product': product})
+
+def add_to_cart(request, product_id):
+    product = Product.objects.get(pk=product_id)
+    cart, created = Cart.objects.get_or_create(user=request.user)
+    cart_product, created = CartProduct.objects.get_or_create(cart=cart, product=product)
+    cart_product.quantity += 1
+    cart_product.save()
+    return redirect('view_cart')
+
+from django.shortcuts import render, get_object_or_404
+
+def view_cart(request):
+    # Attempt to get the user's cart or create a new one if it doesn't exist
+    cart, created = Cart.objects.get_or_create(user=request.user)
+    
+    
+    # Retrieve the cart products, if the cart exists
+    cart_products = cart.cartproduct_set.all()
+    cart_item_count = cart.cartproduct_set.count()
+    return render(request, 'cart.html', {'cart_item_count': cart_item_count, 'cart_products': cart_products, 'cart': cart})

@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+    {% block content %}
+
+                <div class="container">
+                    <div class="card mb-3" >
+                        <div class="row g-0">
+                          <!-- cart.html -->
+                            <h2>Your Cart</h2>
+                            <ul>
+                                {% for cart_product in cart_products %}
+                                    <li>
+                                        {{ cart_product.product.name }} - {{ cart_product.quantity }}
+                                    </li>
+                                {% endfor %}
+                            </ul>
+
+                            <!-- product_detail.html -->
+                            <h2>{{ product.name }}</h2>
+                            <p>Price: ${{ product.price }}</p>
+                            <a href="/">Add to Cart</a>
+
+                      </div>
+                </div>
+    {% endblock %}
