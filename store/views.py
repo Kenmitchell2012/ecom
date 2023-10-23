@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from .models import Product, Cart, Product, CartProduct
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
@@ -65,19 +65,44 @@ def product(request, pk):
 def add_to_cart(request, product_id):
     product = Product.objects.get(pk=product_id)
     cart, created = Cart.objects.get_or_create(user=request.user)
+    
+    # Check if the product is already in the cart
     cart_product, created = CartProduct.objects.get_or_create(cart=cart, product=product)
-    cart_product.quantity += 1
+    
+    # If the cart_product was just created (i.e., it didn't exist previously), set the quantity to 1.
+    if created:
+        cart_product.quantity = 1
+    else:
+        # If the cart_product already existed, increase the quantity by 1.
+        cart_product.quantity += 1
+
     cart_product.save()
     return redirect('view_cart')
 
-from django.shortcuts import render, get_object_or_404
+
+
+def calculate_cart_total(cart):
+    total_price = 0
+
+    for cart_product in cart.cartproduct_set.all():
+        total_price += cart_product.product.price * cart_product.quantity
+
+    return total_price
 
 def view_cart(request):
     # Attempt to get the user's cart or create a new one if it doesn't exist
     cart, created = Cart.objects.get_or_create(user=request.user)
-    
-    
+
+    # Calculate the total price of items in the cart
+    total_price = calculate_cart_total(cart)
+
     # Retrieve the cart products, if the cart exists
     cart_products = cart.cartproduct_set.all()
     cart_item_count = cart.cartproduct_set.count()
-    return render(request, 'cart.html', {'cart_item_count': cart_item_count, 'cart_products': cart_products, 'cart': cart})
+
+    return render(request, 'cart.html', {'cart_item_count': cart_item_count, 'cart_products': cart_products, 'cart': cart, 'total_price': total_price})
+
+def remove_from_cart(request, cart_product_id):
+    cart_product = get_object_or_404(CartProduct, pk=cart_product_id)
+    cart_product.delete()
+    return redirect('view_cart')  # Redirect back to the cart page

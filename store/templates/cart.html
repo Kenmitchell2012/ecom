@@ -10,15 +10,17 @@
                                 {% for cart_product in cart_products %}
                                     <li>
                                         {{ cart_product.product.name }} - {{ cart_product.quantity }}
+                                        <a href="{% url 'remove_from_cart' cart_product.id %}">Remove</a>
+
                                     </li>
                                 {% endfor %}
                             </ul>
 
                             <!-- product_detail.html -->
                             <h2>{{ product.name }}</h2>
-                            <p>Price: ${{ product.price }}</p>
-                            <a href="/">Add to Cart</a>
-
-                      </div>
+                            <p>Total Price: ${{ total_price }}</p>
+                            <a class="btn btn-primary" href="{% url 'home' %}">Home</a>
+                        </div>
+                    </div>
                 </div>
     {% endblock %}
