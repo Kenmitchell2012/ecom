@@ -11,7 +11,8 @@ from .forms import SignUpForm
 
 def home(request):
     products = Product.objects.all()
-    return render(request, 'home.html', {'products': products})
+    username = request.user.username
+    return render(request, 'home.html', {'username': username, 'products': products})
 
 def about(request):
     return render(request, 'about.html', {})
@@ -59,7 +60,8 @@ def register_user(request):
     
 def product(request, pk):
     product = Product.objects.get(id=pk)
-    return render(request, 'product.html', {'product': product})
+    username = request.user.username
+    return render(request, 'product.html', {'product': product, 'username': username})
 
 def category(request, cat):
     #get category
