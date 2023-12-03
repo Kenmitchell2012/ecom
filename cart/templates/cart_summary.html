@@ -10,5 +10,55 @@
                 </div>
             </div>
         </header>
- 
-        {% endblock %}
+        <div class="container">
+            <br><br><br>
+            {% if cart_products %}
+            {% for product in cart_products %}
+            <div class="card mb-3" >
+                <div class="row g-0">
+                    <div class="col-md-4">
+                        <img src="{{ product.image.url }}" class="img-fluid rounded-start" alt="...">
+                    </div>
+                    <div class="col-md-8">
+                        <center>
+                            <div class="card-body">
+                                <h5 class="card-title">{{ product.name }}</h5>
+                                <p class="card-text">{{ product.description }}</p>
+                                
+
+                                {% if product.is_sale %}
+                                    <div class="text-center">
+                                        <!-- Product price-->
+                                        <strike>${{product.price}}</strike>
+                                        ${{ product.sale_price }}
+                                    </div>
+
+
+                                {% else %}
+                                    <p class="card-text"><small class="text-body-secondary">${{ product.price }}</small></p>
+
+                                {% endif %}
+
+
+
+                                <div>
+                                    <a class="btn btn-secondary" href="{% url 'home' %}">Home</a>
+                                    <button id="add-cart" value="{{ product.id }}" class="btn btn-primary">Add To Cart</button>
+                                </div>
+                            </div>
+
+                        </center>
+                    
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+        {% else %}
+        There's nothing in the cart
+        {% endif %}
+
+        </div>
+
+
+ <br/><br/><br/><br/><br/><br/><br/><br/><br/>
+{% endblock %}
