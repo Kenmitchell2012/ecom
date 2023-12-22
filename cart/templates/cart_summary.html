@@ -10,6 +10,8 @@
                 </div>
             </div>
         </header>
+        <span id="cart_quantity">{{ cart_quantity }}</span>
+
         <div class="container">
             <br><br><br>
             {% if cart_products %}
@@ -90,32 +92,28 @@
 {% endblock %}
 <script>
     // check if button is pressed
-    $(document).on('click', '.update-cart', function(e){
-      e.preventDefault();
-      // grab product id
-      var productid = $(this).data('index');
-      $.ajax({
-        type: 'POST',
-        url: '{% url 'cart_update' %}',
-        data: {
+$(document).on('click', '.update-cart', function (e) {
+  e.preventDefault();
 
-          product_id: $(this).data('index'),
-          product_qty: $('#select' + productid + 'option:selected').text(),
-          csrfmiddlewaretoken: '{{ csrf_token }}',
-          action: 'post'
-        },
+  // grab product id
+  var productid = $(this).data('index');
+  $.ajax({
+    type: 'POST',
+    url: '{% url 'cart_update' %}',
+    data: {
+      product_id: $(this).data('index'),
+      product_qty: $('#select' + productid + ' option:selected').text(),
+      csrfmiddlewaretoken: '{{ csrf_token }}',
+      action: 'post',
+    },
 
-        success: function(json){
-            //   //console.log(json)
-            //   document.getElementById('cart_quantity').textContent = json.qty;
-            location.reload();
-        },
+    success: function (json) {
+      $('#cart_quantity').text(json.qty); // Update the cart quantity element
+    },
 
-        error: function(xhr, errmsg, err){
+    error: function (xhr, errmsg, err) {},
+  });
+});
 
-        }
-      });
-
-    })
   </script>
 

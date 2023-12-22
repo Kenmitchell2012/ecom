@@ -11,21 +11,6 @@
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
  */
 
- .fly-in {
-  animation: flyInAnimation 1s ease-in-out;
-  opacity: 0; /* Start with zero opacity to make it appear */
-}
-
-@keyframes flyInAnimation {
-  from {
-    transform: translateY(-50px); /* Initial position off the screen */
-    opacity: 0;
-  }
-  to {
-    transform: translateY(0); /* Final position at the default position */
-    opacity: 1;
-  }
-}
 
 
 

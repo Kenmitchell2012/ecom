@@ -46,7 +46,12 @@ class Cart():
         product_id = str(product)
         product_qty = int(quantity)
 
+        # debugging
+        print(f"Updating cart for product ID: {product_id}, Quantity: {product_qty}")
+
+        #get cart
         ourcart = self.cart
+        # update cart/dictionary
         ourcart[product_id] = product_qty
 
         self.session.modified = True

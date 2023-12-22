@@ -34,6 +34,7 @@ def cart_add(request):
         response = JsonResponse({'qty': cart_quantity})
 
         return response
+    
 
 def cart_delete(request):
     pass
@@ -50,6 +51,5 @@ def cart_update(request):
         cart.update(product=product_id, quantity=product_qty)
 
         response = JsonResponse({'qty': product_qty})
+        # return response
         return response
-
-    pass
